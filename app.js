@@ -9,6 +9,7 @@ import "dotenv/config";
 
 import indexRouter from "./routes/index.js";
 import gamesRouter from "./routes/games.js";
+import categoriesRouter from "./routes/categories.js";
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/games", gamesRouter);
+app.use("/categories", categoriesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
