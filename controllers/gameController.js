@@ -1,5 +1,25 @@
-export function gameList(req, res) {
-  res.send("Not Implemented: Game List");
+import async from "async";
+
+import Game from "../models/Game.js";
+import Category from "../models/Category.js";
+
+export function gameList(req, res, next) {
+  async.parallel(
+    {
+      games: (cb) => Game.find({}, cb),
+      categories: (cb) => Category.find({}, cb),
+    },
+    (err, { games, categories }) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("game-list", {
+        games,
+        categories,
+        home: !req.baseUrl,
+      });
+    }
+  );
 }
 
 export function gameDetail(req, res) {
