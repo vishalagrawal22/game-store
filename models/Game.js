@@ -21,6 +21,6 @@ gameSchema.virtual("url").get(function () {
   return "/games/" + this._id;
 });
 
-const Game = mongoose.model(gameSchema);
+const Game = mongoose.model("Game", gameSchema);
 
 export default Game;
