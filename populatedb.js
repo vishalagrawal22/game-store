@@ -111,6 +111,9 @@ function createDevices(callback) {
       ps4: (cb) => {
         deviceCreate("PlayStation 4", cb);
       },
+      ps5: (cb) => {
+        deviceCreate("PlayStation 5", cb);
+      },
       windows: (cb) => {
         deviceCreate("Microsoft Windows", cb);
       },
