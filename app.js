@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 
 import indexRouter from "./routes/index.js";
+import gamesRouter from "./routes/games.js";
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -32,6 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
+app.use("/games", gamesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

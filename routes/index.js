@@ -1,9 +1,8 @@
 import express from "express";
+import * as gameController from "../controllers/gameController.js";
+
 const router = express.Router();
 
-/* GET home page. */
-router.get("/", function (req, res) {
-  res.render("index", { title: "Express" });
-});
+router.get("/", gameController.gameList);
 
 export default router;
