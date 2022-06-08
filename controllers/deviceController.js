@@ -152,10 +152,34 @@ export const postDeviceUpdate = [
   },
 ];
 
-export function getDeviceDelete(req, res) {
-  res.send("Not Implemented: GET Device Delete");
+export function getDeviceDelete(req, res, next) {
+  async.parallel(
+    {
+      categories: (cb) => Category.find().exec(cb),
+      games: (cb) =>
+        Game.find({ supportedDevices: req.params.id }).select("name").exec(cb),
+      device: (cb) => Device.findById(req.params.id).exec(cb),
+    },
+    (err, { categories, games, device }) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (device === null) {
+        res.redirect("/devices");
+      }
+
+      res.render("device-delete", { categories, games, device });
+    }
+  );
 }
 
-export function postDeviceDelete(req, res) {
-  res.send("Not Implemented: POST Device Delete");
+export function postDeviceDelete(req, res, next) {
+  Device.findByIdAndDelete(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect("/devices");
+  });
 }
