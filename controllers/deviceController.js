@@ -18,8 +18,19 @@ export function deviceList(req, res, next) {
   );
 }
 
-export function deviceDetail(req, res) {
-  res.send("Not Implemented: Device Detail");
+export function deviceDetail(req, res, next) {
+  async.parallel(
+    {
+      categories: (cb) => Category.find({}, "name", cb),
+      device: (cb) => Device.findById(req.params.id).exec(cb),
+    },
+    (err, { categories, device }) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("device-detail", { categories, device });
+    }
+  );
 }
 
 export function getDeviceCreate(req, res) {
