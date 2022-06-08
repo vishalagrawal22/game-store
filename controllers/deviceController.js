@@ -23,7 +23,9 @@ export function deviceDetail(req, res, next) {
   async.parallel(
     {
       games: (cb) =>
-        Game.find()
+        Game.find({
+          supportedDevices: req.params.id,
+        })
           .select({
             name: 1,
             price: 1,
