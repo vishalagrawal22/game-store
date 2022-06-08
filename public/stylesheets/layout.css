@@ -1,0 +1,10 @@
+.action-button {
+  margin-top: 32px;
+  display: flex;
+}
+
+.action-button a,
+.action-button a:hover {
+  text-decoration: none;
+  color: white;
+}

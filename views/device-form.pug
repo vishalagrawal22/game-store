@@ -1,0 +1,17 @@
+extends ./layout.pug
+
+block styles 
+  link(rel="stylesheet", href="/stylesheets/device-form.css")
+
+block content
+  .form-container
+    form.mb-3(method="POST", action="")
+      label.form-label(for="name") Name
+      input.form-control#name(type="text", minlength="3", maxlength="100", required, aria-describedby="nameHelp", name="name", value=(device ? device.name : ""))
+      .form-text#nameHelp Must be 3-100 characters long.
+      input.btn.btn-primary.submit-button(type="submit")
+
+    if errors
+      ul
+        each error in errors
+          li= error.msg

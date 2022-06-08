@@ -3,6 +3,7 @@ import async from "async";
 import Device from "../models/Device.js";
 import Category from "../models/Category.js";
 import Game from "../models/Game.js";
+import { body, validationResult } from "express-validator";
 
 export function deviceList(req, res, next) {
   async.parallel(
@@ -45,13 +46,51 @@ export function deviceDetail(req, res, next) {
   );
 }
 
-export function getDeviceCreate(req, res) {
-  res.send("Not Implemented: Get Device Create");
+export function getDeviceCreate(req, res, next) {
+  Category.find()
+    .select("name")
+    .exec((err, categories) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("device-form", { categories });
+    });
 }
 
-export function postDeviceCreate(req, res) {
-  res.send("Not Implemented: Post Device Create");
-}
+export const postDeviceCreate = [
+  body("name")
+    .trim()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("name should be 3-100 characters long.")
+    .escape(),
+  (req, res, next) => {
+    const device = new Device({
+      name: req.body.name,
+    });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      Category.find()
+        .select("name")
+        .exec((err, categories) => {
+          if (err) {
+            return next(err);
+          }
+          res.render("device-form", {
+            categories,
+            device,
+            errors: errors.array(),
+          });
+        });
+    } else {
+      device.save((err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/devices");
+      });
+    }
+  },
+];
 
 export function getDeviceUpdate(req, res) {
   res.send("Not Implemented: GET Device Update");
