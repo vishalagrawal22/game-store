@@ -1,4 +1,9 @@
+import async from "async";
+
 import Category from "../models/Category.js";
+import Device from "../models/Device.js";
+
+import { getFilteredGames } from "./gameController.js";
 
 export function categoryList(req, res, next) {
   Category.find({}, (err, categories) => {
@@ -9,8 +14,27 @@ export function categoryList(req, res, next) {
   });
 }
 
-export function categoryDetail(req, res) {
-  res.send("Not Implemented: Category Detail");
+export function categoryDetail(req, res, next) {
+  async.parallel(
+    {
+      games: (cb) => getFilteredGames(req.params.id, req.query, cb),
+      devices: (cb) => Device.find().exec(cb),
+      categories: (cb) => Category.find().select("name").exec(cb),
+      category: (cb) => Category.findById(req.params.id).exec(cb),
+    },
+    (err, { games, category, categories, devices }) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("category-detail", {
+        games,
+        category,
+        categories,
+        devices,
+        filters: req.query,
+      });
+    }
+  );
 }
 
 export function getCategoryCreate(req, res) {
