@@ -16,10 +16,14 @@ block content
       each category in game.categories
         li
           a(href=category.url)= category.name
+      else 
+        p No category found!
 
     h5 Supported Devices
     ul.supported-devices 
       each device in game.supportedDevices
         li
           a(href=device.url)= device.name
+      else 
+        p No device found!
 

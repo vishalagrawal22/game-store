@@ -13,6 +13,8 @@ div(style="padding: 0px 32px;")
         option(value='') Choose your device
         each device in devices
           option(value=device._id, selected=(filters && device._id == filters.supportedDevice))= device.name
+        else 
+          p No device found!
 
     .col
       button.btn.btn-primary(type="submit") Submit
