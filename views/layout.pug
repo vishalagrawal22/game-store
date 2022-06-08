@@ -23,6 +23,8 @@ html
               a.nav-link.active(href=category.url aria-current="page")= category.name
             else 
               a.nav-link(href=category.url)= category.name
+          else 
+            p No category found!
 
       .flex-grow-1
         block content

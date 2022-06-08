@@ -1,26 +1,46 @@
 import async from "async";
+import { query } from "express-validator";
 
 import Game from "../models/Game.js";
 import Category from "../models/Category.js";
+import Device from "../models/Device.js";
 
-export function gameList(req, res, next) {
-  async.parallel(
-    {
-      games: (cb) => Game.find({}, "name price quantity imageURL", cb),
-      categories: (cb) => Category.find({}, "name", cb),
-    },
-    (err, { games, categories }) => {
-      if (err) {
-        return next(err);
-      }
-      res.render("game-list", {
-        games,
-        categories,
-        home: !req.baseUrl,
-      });
+export const gameList = [
+  query("ageRating").customSanitizer((rating) => {
+    return rating ? rating.replaceAll("+", " ") : "";
+  }),
+  (req, res, next) => {
+    const filters = {};
+    if (req.query.ageRating) {
+      filters.ageRating = req.query.ageRating;
     }
-  );
-}
+
+    if (req.query.supportedDevice) {
+      filters.supportedDevices = req.query.supportedDevice;
+    }
+
+    async.parallel(
+      {
+        games: (cb) => Game.find(filters, "name price quantity imageURL", cb),
+        categories: (cb) => Category.find({}, "name", cb),
+        devices: (cb) => Device.find({}, cb),
+      },
+      (err, { games, categories, devices }) => {
+        if (err) {
+          return next(err);
+        }
+
+        res.render("game-list", {
+          games,
+          categories,
+          devices,
+          home: !req.baseUrl,
+          filters: req.query,
+        });
+      }
+    );
+  },
+];
 
 export function gameDetail(req, res) {
   res.send("Not Implemented: Game Detail");
