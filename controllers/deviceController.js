@@ -92,13 +92,65 @@ export const postDeviceCreate = [
   },
 ];
 
-export function getDeviceUpdate(req, res) {
-  res.send("Not Implemented: GET Device Update");
+export function getDeviceUpdate(req, res, next) {
+  async.parallel(
+    {
+      categories: (cb) => Category.find().select("name").exec(cb),
+      device: (cb) => Device.findById(req.params.id).exec(cb),
+    },
+    (err, { categories, device }) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (device === null) {
+        res.redirect("/devices");
+      }
+
+      res.render("device-form", {
+        categories,
+        device,
+      });
+    }
+  );
 }
 
-export function postDeviceUpdate(req, res) {
-  res.send("Not Implemented: POST Device Update");
-}
+export const postDeviceUpdate = [
+  body("name")
+    .trim()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("name should be 3-100 characters long.")
+    .escape(),
+  (req, res, next) => {
+    const device = new Device({
+      name: req.body.name,
+      _id: req.params.id,
+    });
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      Category.find()
+        .select("name")
+        .exec((err, categories) => {
+          if (err) {
+            return next(err);
+          }
+          res.render("device-form", {
+            categories,
+            device,
+            errors: errors.array(),
+          });
+        });
+    } else {
+      Device.findByIdAndUpdate(req.params.id, device, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/devices");
+      });
+    }
+  },
+];
 
 export function getDeviceDelete(req, res) {
   res.send("Not Implemented: GET Device Delete");
