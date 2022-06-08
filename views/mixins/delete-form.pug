@@ -1,0 +1,12 @@
+mixin deleteForm(item)
+  div(style="padding:16px")
+    if games.length > 0 
+      h4 The device is been used in following games (delete or modify them to continue) :-
+      ul 
+        each game in games 
+          li
+            a.fs-5(href=game.url)= game.name
+    else 
+      h4 are you sure, you want to delete #{item.name}?
+      form(method='POST', action='')
+        button.btn.btn-danger Delete

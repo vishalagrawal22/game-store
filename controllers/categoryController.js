@@ -3,6 +3,7 @@ import { body, validationResult } from "express-validator";
 
 import Category from "../models/Category.js";
 import Device from "../models/Device.js";
+import Game from "../models/Game.js";
 
 import { getFilteredGames } from "./gameController.js";
 
@@ -149,10 +150,34 @@ export const postCategoryUpdate = [
   },
 ];
 
-export function getCategoryDelete(req, res) {
-  res.send("Not Implemented: GET Category Delete");
+export function getCategoryDelete(req, res, next) {
+  async.parallel(
+    {
+      categories: (cb) => Category.find().select("name").exec(cb),
+      games: (cb) =>
+        Game.find({ categories: req.params.id }).select("name").exec(cb),
+      category: (cb) => Category.findById(req.params.id).exec(cb),
+    },
+    (err, { categories, games, category }) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (category === null) {
+        res.redirect("/categories");
+      }
+
+      res.render("category-delete", { categories, games, category });
+    }
+  );
 }
 
-export function postCategoryDelete(req, res) {
-  res.send("Not Implemented: POST Category Delete");
+export function postCategoryDelete(req, res, next) {
+  Category.findByIdAndDelete(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect("/categories");
+  });
 }
