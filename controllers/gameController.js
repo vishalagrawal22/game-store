@@ -6,8 +6,8 @@ import Category from "../models/Category.js";
 export function gameList(req, res, next) {
   async.parallel(
     {
-      games: (cb) => Game.find({}, cb),
-      categories: (cb) => Category.find({}, cb),
+      games: (cb) => Game.find({}, "name price quantity imageURL", cb),
+      categories: (cb) => Category.find({}, "name", cb),
     },
     (err, { games, categories }) => {
       if (err) {
