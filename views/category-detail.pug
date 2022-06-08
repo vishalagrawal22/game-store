@@ -4,7 +4,8 @@ block content
   div(style="padding: 16px; padding-bottom: 0px;")
     h2= category.name
     p= category.description
-    h4 Games in the category
+    a.btn.btn-primary(href=`${category.url}/update`, style="color: white; margin-right: 16px") Update category
+    h4(style="margin-top: 16px;") Games in the category
   hr
   include includes/game-list-filter.pug  
   hr
