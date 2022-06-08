@@ -1,0 +1,17 @@
+.card-container(style="padding: 16px; display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-around;")
+  - games.sort((game1, game2) => game1.name < game2.name ? -1 : (game1.name > game2.name) ? 1 : 0)
+  each game in games
+    .card(style="width: 20rem;")
+      img.card-img-top(src=game.imageURL, height="350px", alt=game.name)
+      .card-body
+        h5.card-title
+          strong= game.name
+
+      ul.list-group.list-group-flush 
+        li.list-group-item #[strong Price: ] Rs. #{game.price}
+        li.list-group-item #[strong Quantity: ] #{game.quantity}
+
+      .card-body 
+        a.card-link(href=game.url) Learn more
+  else 
+    p No game found!

@@ -1,0 +1,18 @@
+div(style="padding: 0px 32px;")
+  form.row.g-3.align-items-center
+    .col
+      .visually-hidden(for="age-rating") Age rating
+      select.form-select#age-rating(name="ageRating")
+        option(value='') Choose age rating
+        each rating in ["PEGI 3", "PEGI 7", "PEGI 12", "PEGI 16", "PEGI 18"]
+          option(value=rating, selected=(filters && rating == filters.ageRating))= rating
+
+    .col
+      .visually-hidden(for="supported-device") 
+      select.form-select#supported-device(name="supportedDevice") Supported Device
+        option(value='') Choose your device
+        each device in devices
+          option(value=device._id, selected=(filters && device._id == filters.supportedDevice))= device.name
+
+    .col
+      button.btn.btn-primary(type="submit") Submit

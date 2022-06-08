@@ -1,44 +1,7 @@
 extends ./layout.pug
 
-block styles 
-  link(rel="stylesheet", href="/stylesheets/game-list.css")
-
 block content
-  .filter-container 
-    form.row.g-3.align-items-center
-      .col
-        .visually-hidden(for="age-rating") Age rating
-        select.form-select#age-rating(name="ageRating")
-          option(value='') Choose age rating
-          each rating in ["PEGI 3", "PEGI 7", "PEGI 12", "PEGI 16", "PEGI 18"]
-            option(value=rating, selected=(filters && rating == filters.ageRating))= rating
-
-      .col
-        .visually-hidden(for="supported-device") 
-        select.form-select#supported-device(name="supportedDevice") Supported Device
-          option(value='') Choose your device
-          each device in devices
-            option(value=device._id, selected=(filters && device._id == filters.supportedDevice))= device.name
-
-      .col
-        button.btn.btn-primary(type="submit") Submit
-
-  hr
-
-  .card-container
-    - games.sort((game1, game2) => game1.name < game2.name ? -1 : (game1.name > game2.name) ? 1 : 0)
-    each game in games
-      .card(style="width: 20rem;")
-        img.card-img-top(src=game.imageURL, height="350px", alt=game.name)
-        .card-body
-          h5.card-title
-            strong= game.name
-
-        ul.list-group.list-group-flush 
-          li.list-group-item #[strong Price: ] Rs. #{game.price}
-          li.list-group-item #[strong Quantity: ] #{game.quantity}
-
-        .card-body 
-          a.card-link(href=game.url) Learn more
-    else 
-      p No game found!
+  div(style="padding-top: 16px")
+    include includes/game-list-filter.pug  
+    hr
+    include includes/game-card-list.pug

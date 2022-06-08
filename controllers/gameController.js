@@ -1,46 +1,55 @@
 import async from "async";
-import { query } from "express-validator";
 
 import Game from "../models/Game.js";
 import Category from "../models/Category.js";
 import Device from "../models/Device.js";
 
-export const gameList = [
-  query("ageRating").customSanitizer((rating) => {
-    return rating ? rating.replaceAll("+", " ") : "";
-  }),
-  (req, res, next) => {
-    const filters = {};
-    if (req.query.ageRating) {
-      filters.ageRating = req.query.ageRating;
-    }
+export const getFilteredGames = (category, queryParams, callback) => {
+  const filters = {};
+  if (category) {
+    filters.categories = category;
+  }
 
-    if (req.query.supportedDevice) {
-      filters.supportedDevices = req.query.supportedDevice;
-    }
+  if (queryParams.ageRating) {
+    filters.ageRating = queryParams.ageRating.replaceAll("+", " ");
+  }
 
-    async.parallel(
-      {
-        games: (cb) => Game.find(filters, "name price quantity imageURL", cb),
-        categories: (cb) => Category.find({}, "name", cb),
-        devices: (cb) => Device.find({}, cb),
-      },
-      (err, { games, categories, devices }) => {
-        if (err) {
-          return next(err);
-        }
+  if (queryParams.supportedDevice) {
+    filters.supportedDevices = queryParams.supportedDevice;
+  }
 
-        res.render("game-list", {
-          games,
-          categories,
-          devices,
-          home: !req.baseUrl,
-          filters: req.query,
-        });
+  Game.find(filters)
+    .select({
+      name: 1,
+      price: 1,
+      quantity: 1,
+      imageURL: 1,
+    })
+    .exec(callback);
+};
+
+export function gameList(req, res, next) {
+  async.parallel(
+    {
+      games: (cb) => getFilteredGames(null, req.query, cb),
+      categories: (cb) => Category.find().select("name").exec(cb),
+      devices: (cb) => Device.find().exec(cb),
+    },
+    (err, { games, categories, devices }) => {
+      if (err) {
+        return next(err);
       }
-    );
-  },
-];
+
+      res.render("game-list", {
+        games,
+        categories,
+        devices,
+        home: !req.baseUrl,
+        filters: req.query,
+      });
+    }
+  );
+}
 
 export function gameDetail(req, res, next) {
   async.parallel(
