@@ -1,4 +1,5 @@
 import async from "async";
+import { body, validationResult } from "express-validator";
 
 import Category from "../models/Category.js";
 import Device from "../models/Device.js";
@@ -37,13 +38,54 @@ export function categoryDetail(req, res, next) {
   );
 }
 
-export function getCategoryCreate(req, res) {
-  res.send("Not Implemented: Get Category Create");
+export function getCategoryCreate(req, res, next) {
+  Category.find()
+    .select("name")
+    .exec((err, categories) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("category-form", { categories });
+    });
 }
 
-export function postCategoryCreate(req, res) {
-  res.send("Not Implemented: Post Category Create");
-}
+export const postCategoryCreate = [
+  body("name")
+    .trim()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("name should be 3-100 characters long.")
+    .escape(),
+  body("description").trim().escape(),
+  (req, res, next) => {
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+    });
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      Category.find()
+        .select("name")
+        .exec((err, categories) => {
+          if (err) {
+            return next(err);
+          }
+          res.render("category-form", {
+            categories,
+            category,
+            errors: errors.array(),
+          });
+        });
+    } else {
+      category.save((err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/categories");
+      });
+    }
+  },
+];
 
 export function getCategoryUpdate(req, res) {
   res.send("Not Implemented: GET Category Update");

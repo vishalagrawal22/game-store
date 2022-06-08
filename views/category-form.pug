@@ -1,0 +1,19 @@
+extends ./layout.pug
+
+block styles 
+  link(rel="stylesheet", href="/stylesheets/form.css")
+
+block content
+  .form-container
+    form.mb-3(method="POST", action="")
+      label.form-label(for="name") Name
+      input.form-control#name(type="text", minlength="3", maxlength="100", required, aria-describedby="nameHelp", name="name", value=(category ? category.name : ""))
+      .form-text#nameHelp Must be 3-100 characters long.
+      label.form-label(for="description") Description
+      textarea.form-control#description(name="description", cols="30", rows="5") #{category ? category.description : ""}
+      input.btn.btn-primary.submit-button(type="submit")
+
+    if errors
+      ul
+        each error in errors
+          li= error.msg
