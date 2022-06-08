@@ -1,5 +1,12 @@
-export function categoryList(req, res) {
-  res.send("Not Implemented: Category List");
+import Category from "../models/Category.js";
+
+export function categoryList(req, res, next) {
+  Category.find({}, (err, categories) => {
+    if (err) {
+      return next(err);
+    }
+    res.render("category-list", { categories });
+  });
 }
 
 export function categoryDetail(req, res) {
