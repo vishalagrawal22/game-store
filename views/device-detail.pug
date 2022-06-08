@@ -1,5 +1,7 @@
 extends ./layout.pug
 
 block content 
-  div(style="padding: 16px")
-    p #[strong Name: ] #{device.name}
+  div(style="padding: 16px; padding-bottom: 0px;")
+    h2= device.name
+    h4(style="margin-top: 16px;") Compatible Games
+  include includes/game-card-list.pug

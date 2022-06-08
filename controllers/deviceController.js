@@ -2,6 +2,7 @@ import async from "async";
 
 import Device from "../models/Device.js";
 import Category from "../models/Category.js";
+import Game from "../models/Game.js";
 
 export function deviceList(req, res, next) {
   async.parallel(
@@ -21,14 +22,23 @@ export function deviceList(req, res, next) {
 export function deviceDetail(req, res, next) {
   async.parallel(
     {
+      games: (cb) =>
+        Game.find()
+          .select({
+            name: 1,
+            price: 1,
+            quantity: 1,
+            imageURL: 1,
+          })
+          .exec(cb),
       categories: (cb) => Category.find({}, "name", cb),
       device: (cb) => Device.findById(req.params.id).exec(cb),
     },
-    (err, { categories, device }) => {
+    (err, { categories, device, games }) => {
       if (err) {
         return next(err);
       }
-      res.render("device-detail", { categories, device });
+      res.render("device-detail", { categories, device, games });
     }
   );
 }
