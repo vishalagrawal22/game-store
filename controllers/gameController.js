@@ -42,8 +42,23 @@ export const gameList = [
   },
 ];
 
-export function gameDetail(req, res) {
-  res.send("Not Implemented: Game Detail");
+export function gameDetail(req, res, next) {
+  async.parallel(
+    {
+      categories: (cb) => Category.find({}, "name", cb),
+      game: (cb) =>
+        Game.findById(req.params.id)
+          .populate("categories")
+          .populate("supportedDevices")
+          .exec(cb),
+    },
+    (err, { categories, game }) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("game-detail", { categories, game });
+    }
+  );
 }
 
 export function getGameCreate(req, res) {

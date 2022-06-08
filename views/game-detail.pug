@@ -1,0 +1,25 @@
+extends ./layout.pug 
+
+block styles
+  link(rel="stylesheet", href="/stylesheets/game-detail.css")
+
+block content
+  .game-container
+    img.game-image(src=game.imageURL, alt=game.name)
+    h2= game.name 
+    p= game.description
+    p #[strong Age Rating: ] #{game.ageRating} 
+    p #[strong Price: ] Rs. #{game.price}
+    p #[strong Quantity: ] #{game.quantity}
+    h5 Categories
+    ul.categories
+      each category in game.categories
+        li
+          a(href=category.url)= category.name
+
+    h5 Supported Devices
+    ul.supported-devices 
+      each device in game.supportedDevices
+        li
+          a(href=device.url)= device.name
+
