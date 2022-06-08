@@ -1,5 +1,21 @@
-export function deviceList(req, res) {
-  res.send("Not Implemented: Device List");
+import async from "async";
+
+import Device from "../models/Device.js";
+import Category from "../models/Category.js";
+
+export function deviceList(req, res, next) {
+  async.parallel(
+    {
+      devices: (cb) => Device.find().exec(cb),
+      categories: (cb) => Category.find().select("name").exec(cb),
+    },
+    (err, { devices, categories }) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("device-list.pug", { devices, categories });
+    }
+  );
 }
 
 export function deviceDetail(req, res) {

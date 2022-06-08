@@ -1,0 +1,9 @@
+extends ./layout.pug
+
+block content
+  div(style="padding: 16px;")
+    h4 Devices
+    ul 
+      each device in devices 
+        li
+          a(href=device.url)= device.name
