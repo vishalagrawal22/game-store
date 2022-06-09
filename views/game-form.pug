@@ -1,0 +1,80 @@
+extends ./layout.pug
+
+block styles 
+  link(rel="stylesheet", href="/stylesheets/form.css")    
+  link(
+    rel="stylesheet",
+    href="https://cdn.jsdelivr.net/npm/choices.js@10.1.0/public/assets/styles/choices.min.css")
+  link(rel="stylesheet", href="/stylesheets/game-form.css")
+
+block script 
+  script(src="https://cdn.jsdelivr.net/npm/choices.js@10.1.0/public/assets/scripts/choices.min.js")
+  script(src="/javascripts/game-form.js")
+
+block content
+  .form-container
+    form#game-form(method="POST", action="", enctype="multipart/form-data")
+      label.form-label(for="game-image") Game Image
+      select#game-image-type(name="gameImageType")
+        option(value="url", selected) Load from URL
+        option(value="file") Upload an Image
+
+      input#game-image-file.form-control(name="gameImageFile", type="file", accept="image/jpeg, image/png, image/gif", style="display: none;")
+      input#game-image-url.form-control(name="gameImageURL", value=(game ? game.imageURL : ""))
+
+      img#game-image-preview(src=(game ? game.imageURL : ''))
+
+      label.form-label(for="name") Name
+      input.form-control#name(type="text", minlength="3", maxlength="100", required, aria-describedby="name-help", name="name", value=(game ? game.name : ""))
+      .form-text#name-help Must be 3-100 characters long.
+
+      label.form-label(for="description") Description
+      textarea.form-control#description(name="description", cols="30", rows="5")= game ? game.description : ''
+
+      label.form-label(for="price") Price
+      input.form-control#price(type="number", min="0", aria-describedby="price-help", name="price", value=(game ? game.price : 0))
+      .form-text#price-help Must be greater than equal to zero.
+
+      label.form-label(for="quantity") Quantity
+      input.form-control#quantity(type="number", min="0", aria-describedby="quantity-help", name="quantity", value=(game ? game.quantity : 0))
+      .form-text#quantity-help Must be greater than equal to zero.
+
+      label.form-label(for="age-rating") Age rating
+      select#age-rating(name="ageRating", required)
+        each rating in ["PEGI 3", "PEGI 7", "PEGI 12", "PEGI 16", "PEGI 18"]
+          if game && rating == game.ageRating 
+            option(value=rating, selected)= rating
+          else
+            option(value=rating)= rating
+
+      label.form-label(for="categories") Categories
+      select#categories(name="categories", multiple)
+        option(value="") Choose category
+        each category in categories
+          - let selected = null;
+          if game
+            - selected = game.categories.find(gameCategory => gameCategory._id.equals(category._id))
+          if selected
+            option(value=category._id, selected)= category.name
+          else 
+            option(value=category._id)= category.name
+
+      label.form-label(for="supported-devices") Devices
+      select#supported-devices(name="supportedDevices",multiple)
+        option(value="") Choose device
+        each device in devices
+          - let selected = null;
+          if game 
+            - selected = game.supportedDevices.find(gameDevice => gameDevice._id.equals(device._id))
+
+          if game && selected
+            option(value=device._id, selected)= device.name
+          else 
+            option(value=device._id)= device.name
+
+      input.btn.btn-primary.submit-button(type="submit")
+
+    if errors
+      ul
+        each error in errors
+          li= error.msg

@@ -14,3 +14,7 @@ form {
 .submit-button {
   margin: 16px 0px;
 }
+
+label {
+  margin-top: 16px;
+}
