@@ -318,10 +318,32 @@ export const postGameUpdate = [
   },
 ];
 
-export function getGameDelete(req, res) {
-  res.send("Not Implemented: GET Game Delete");
+export function getGameDelete(req, res, next) {
+  async.parallel(
+    {
+      categories: (cb) => Category.find().exec(cb),
+      game: (cb) => Game.findById(req.params.id).select("name").exec(cb),
+    },
+    (err, { categories, game }) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (game === null) {
+        res.redirect("/games");
+      }
+
+      res.render("game-delete", { categories, game });
+    }
+  );
 }
 
-export function postGameDelete(req, res) {
-  res.send("Not Implemented: POST Game Delete");
+export function postGameDelete(req, res, next) {
+  Game.findByIdAndDelete(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect("/games");
+  });
 }
