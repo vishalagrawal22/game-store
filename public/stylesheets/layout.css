@@ -1,13 +1,25 @@
-.action-button {
-  margin-top: 16px;
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.action-button button {
-  margin: 16px 0px 8px;
-}
-
-.action-button a,
-.action-button a:hover {
+.action-buttons a,
+.action-buttons a:hover {
   text-decoration: none;
   color: white;
+}
+
+.nav-section {
+  padding: 0px 16px;
+}
+
+.category-list {
+  padding-top: 16px;
+}
+
+.view-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

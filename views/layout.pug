@@ -15,19 +15,28 @@ html
           if !home
             a.btn.btn-secondary.btn-lg(href="/", style="padding: 16px") Go To Home
     main.flex-grow-1.d-flex
-      nav.flex-grow-0.flex-shrink-0.nav-pills.border-end.d-inline-block.align-items-sm-stretch(style="width: 250px; padding: 16px;")
-        h4 Categories 
-        ul.nav.flex-column.d-inline-flex
-          each category in categories
-            li.nav-item.fs-6
-            if currentCategoryId && currentCategoryId == category._id
-              a.nav-link.active(href=category.url aria-current="page")= category.name
+      nav.flex-grow-0.flex-shrink-0.nav-pills.border-end.d-inline-block.align-items-sm-stretch(style="width: 250px;")
+        .nav-section.category-list
+          h4 Categories 
+          ul.nav.flex-column.d-inline-flex
+            each category in categories
+              li.nav-item.fs-6
+              if currentCategoryId && currentCategoryId == category._id
+                a.nav-link.active(href=category.url aria-current="page")= category.name
+              else 
+                a.nav-link(href=category.url)= category.name
             else 
-              a.nav-link(href=category.url)= category.name
-          else 
-            p No category found!
+              p No category found!
 
-        .action-button
+        hr
+
+        .nav-section.view-groups
+          a.fs-5(href="/categories") View categories
+          a.fs-5(href="/devices") View devices 
+
+        hr
+
+        .nav-section.action-buttons
           button.btn.btn-success
             a(href="/devices/create") Create device
 
