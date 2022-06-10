@@ -17,3 +17,7 @@
 #game-image-preview[src]:not([src=""]) {
   margin-top: 16px;
 }
+
+.hidden {
+  display: none;
+}

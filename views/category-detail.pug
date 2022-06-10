@@ -1,12 +1,15 @@
 extends ./layout.pug
 
+block styles 
+  link(rel="stylesheet", href="/stylesheets/game-card.css")
+
 block content 
-  div(style="padding: 16px; padding-bottom: 0px;")
+  .p-3.pb-0
     h2= category.name
     p= category.description
-    a.btn.btn-primary(href=`${category.url}/update`, style="color: white; margin-right: 16px") Update category
-    a.btn.btn-danger(href=`${category.url}/delete`, style="color: white;") Delete category
-    h4(style="margin-top: 16px;") Games in the category
+    a.btn.btn-primary.me-3(href=`${category.url}/update`) Update category
+    a.btn.btn-danger(href=`${category.url}/delete`) Delete category
+    h4.mb-3.mt-3 Games in the category
   hr
   include includes/game-list-filter.pug  
   hr

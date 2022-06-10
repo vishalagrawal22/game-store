@@ -1,0 +1,15 @@
+.card-container {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: space-around;
+}
+
+.card {
+  width: 20rem;
+}
+
+.card img {
+  height: 350px;
+}

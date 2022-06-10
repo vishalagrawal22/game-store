@@ -1,9 +1,12 @@
 extends ./layout.pug
 
+block styles 
+  link(rel="stylesheet", href="/stylesheets/game-card.css")
+
 block content 
-  div(style="padding: 16px; padding-bottom: 0px;")
+  .p-3.pb-0
     h2= device.name
-    a.btn.btn-primary(href=`${device.url}/update`, style="color: white; margin-right: 16px") Update device
-    a.btn.btn-danger(href=`${device.url}/delete`, style="color: white;") Delete device
-    h4(style="margin-top: 16px;") Compatible Games
+    a.btn.btn-primary.me-3(href=`${device.url}/update`) Update device
+    a.btn.btn-danger(href=`${device.url}/delete`) Delete device
+    h4.mb-3.mt-3 Compatible Games
   include includes/game-card-list.pug

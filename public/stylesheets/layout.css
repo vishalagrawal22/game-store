@@ -10,6 +10,10 @@
   color: white;
 }
 
+.sidebar {
+  width: 250px;
+}
+
 .nav-section {
   padding: 0px 16px;
 }

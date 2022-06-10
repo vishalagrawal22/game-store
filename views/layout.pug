@@ -8,43 +8,45 @@ html
   body.min-vh-100.d-flex.flex-column
     header
       nav.navbar.navbar-light.bg-light
-        .container-fluid(style="padding: 8px 16px")
-          div(style="cursor: none")
+        .container-fluid.py-2.px-3
+          div
             img.d-inline-block(src="/images/header-image.png", alt="gamestore", height="80")
-            span(style="font-size: 36px; margin-left: 16px") Game Store
+            span.ms-3.fs-1 Game Store
           if !home
-            a.btn.btn-secondary.btn-lg(href="/", style="padding: 16px") Go To Home
+            a.btn.btn-secondary.btn-lg.p-3(href="/") Go To Home
+
     main.flex-grow-1.d-flex
-      nav.flex-grow-0.flex-shrink-0.nav-pills.border-end.d-inline-block.align-items-sm-stretch(style="width: 250px;")
-        .nav-section.category-list
-          h4 Categories 
-          ul.nav.flex-column.d-inline-flex
-            each category in categories
-              li.nav-item.fs-6
-              if currentCategoryId && currentCategoryId == category._id
-                a.nav-link.active(href=category.url aria-current="page")= category.name
+      block navbar
+        nav.sidebar.flex-grow-0.flex-shrink-0.nav-pills.border-end.d-inline-block.align-items-sm-stretch
+          .nav-section.category-list
+            h4 Categories 
+            ul.nav.flex-column.d-inline-flex
+              each category in categories
+                li.nav-item.fs-6
+                if currentCategoryId && currentCategoryId == category._id
+                  a.nav-link.active(href=category.url aria-current="page")= category.name
+                else 
+                  a.nav-link(href=category.url)= category.name
               else 
-                a.nav-link(href=category.url)= category.name
-            else 
-              p No category found!
+                p No category found!
 
-        hr
+          hr
 
-        .nav-section.view-groups
-          a.fs-5(href="/categories") View categories
-          a.fs-5(href="/devices") View devices 
+          .nav-section.view-groups
+            a.fs-5(href="/categories") View categories
+            a.fs-5(href="/devices") View devices 
 
-        hr
+          hr
 
-        .nav-section.action-buttons
-          button.btn.btn-success
-            a(href="/devices/create") Create device
+          .nav-section.action-buttons
+            button.btn.btn-success
+              a(href="/devices/create") Create device
 
-          button.btn.btn-success
-            a(href="/categories/create") Create category
+            button.btn.btn-success
+              a(href="/categories/create") Create category
 
-          button.btn.btn-success
-            a(href="/games/create") Create game
+            button.btn.btn-success
+              a(href="/games/create") Create game
 
       .flex-grow-1
         block content

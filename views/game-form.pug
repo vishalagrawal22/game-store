@@ -19,7 +19,7 @@ block content
         option(value="url", selected) Load from URL
         option(value="file") Upload an Image
 
-      input#game-image-file.form-control(name="gameImageFile", type="file", accept="image/jpeg, image/png, image/gif", style="display: none;")
+      input#game-image-file.form-control.hidden(name="gameImageFile", type="file", accept="image/jpeg, image/png, image/gif")
       input#game-image-url.form-control(name="gameImageURL", value=(game ? game.imageURL : ""))
 
       img#game-image-preview(src=(game ? game.imageURL : ''))
