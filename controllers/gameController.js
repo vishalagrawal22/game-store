@@ -242,9 +242,9 @@ export function getGameUpdate(req, res, next) {
 
       if (game === null) {
         res.redirect("/games");
+      } else {
+        res.render("game-form", { categories, devices, game });
       }
-
-      res.render("game-form", { categories, devices, game });
     }
   );
 }
@@ -331,9 +331,9 @@ export function getGameDelete(req, res, next) {
 
       if (game === null) {
         res.redirect("/games");
+      } else {
+        res.render("game-delete", { categories, game });
       }
-
-      res.render("game-delete", { categories, game });
     }
   );
 }

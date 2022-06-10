@@ -101,12 +101,12 @@ export function getCategoryUpdate(req, res, next) {
 
       if (category === null) {
         res.redirect("/categories");
+      } else {
+        res.render("category-form", {
+          categories,
+          category,
+        });
       }
-
-      res.render("category-form", {
-        categories,
-        category,
-      });
     }
   );
 }
@@ -165,9 +165,9 @@ export function getCategoryDelete(req, res, next) {
 
       if (category === null) {
         res.redirect("/categories");
+      } else {
+        res.render("category-delete", { categories, games, category });
       }
-
-      res.render("category-delete", { categories, games, category });
     }
   );
 }

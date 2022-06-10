@@ -105,12 +105,12 @@ export function getDeviceUpdate(req, res, next) {
 
       if (device === null) {
         res.redirect("/devices");
+      } else {
+        res.render("device-form", {
+          categories,
+          device,
+        });
       }
-
-      res.render("device-form", {
-        categories,
-        device,
-      });
     }
   );
 }
@@ -167,9 +167,9 @@ export function getDeviceDelete(req, res, next) {
 
       if (device === null) {
         res.redirect("/devices");
+      } else {
+        res.render("device-delete", { categories, games, device });
       }
-
-      res.render("device-delete", { categories, games, device });
     }
   );
 }
