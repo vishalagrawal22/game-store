@@ -22,7 +22,7 @@ block content
       input#game-image-file.form-control.hidden(name="gameImageFile", type="file", accept="image/jpeg, image/png, image/gif")
       input#game-image-url.form-control(name="gameImageURL", value=(game ? game.imageURL : ""))
 
-      img#game-image-preview(src=(game ? game.imageURL : ''))
+      img#game-image-preview(crossorigin="anonymous", src=(game ? game.imageURL : ''))
 
       label.form-label(for="name") Name
       input.form-control#name(type="text", minlength="3", maxlength="100", required, aria-describedby="name-help", name="name", value=(game ? game.name : ""))

@@ -2,7 +2,7 @@
   - games.sort((game1, game2) => game1.name < game2.name ? -1 : (game1.name > game2.name) ? 1 : 0)
   each game in games
     .card
-      img.card-img-top(src=game.imageURL, alt=game.name)
+      img.card-img-top(crossorigin="anonymous", src=game.imageURL, alt=game.name)
       .card-body
         h5.card-title
           strong= game.name

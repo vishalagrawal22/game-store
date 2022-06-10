@@ -7,13 +7,18 @@
     "start": "node ./bin/www.js",
     "dev": "DEBUG=game-store:* nodemon ./bin/www.js"
   },
+  "engines": {
+    "node": "16.15.0"
+  },
   "dependencies": {
     "async": "^3.2.4",
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "debug": "^4.3.4",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-validator": "^6.14.1",
+    "helmet": "^5.1.0",
     "http-errors": "^2.0.0",
     "imgur": "^2.2.0",
     "mongoose": "^6.3.5",

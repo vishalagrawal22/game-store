@@ -5,7 +5,7 @@ block styles
 
 block content
   .game-container
-    img.game-image(src=game.imageURL, alt=game.name)
+    img.game-image(crossorigin="anonymous", src=game.imageURL, alt=game.name)
     h2= game.name 
     p= game.description
     p #[strong Age Rating: ] #{game.ageRating} 
