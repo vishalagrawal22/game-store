@@ -228,13 +228,95 @@ export const postGameCreate = [
   },
 ];
 
-export function getGameUpdate(req, res) {
-  res.send("Not Implemented: GET Game Update");
+export function getGameUpdate(req, res, next) {
+  async.parallel(
+    {
+      categories: (cb) => Category.find().select("name").exec(cb),
+      devices: (cb) => Device.find().select("name").exec(cb),
+      game: (cb) => Game.findById(req.params.id).exec(cb),
+    },
+    (err, { categories, devices, game }) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (game === null) {
+        res.redirect("/games");
+      }
+
+      res.render("game-form", { categories, devices, game });
+    }
+  );
 }
 
-export function postGameUpdate(req, res) {
-  res.send("Not Implemented: POST Game Update");
-}
+export const postGameUpdate = [
+  upload.single("gameImageFile"),
+  gameSetup,
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const {
+      name,
+      description,
+      price,
+      quantity,
+      ageRating,
+      imageURL,
+      categories,
+      supportedDevices,
+    } = req.body;
+
+    const gameData = {
+      name,
+      ageRating,
+      categories,
+      supportedDevices,
+      _id: req.params.id,
+    };
+
+    if (description) {
+      gameData.description = description;
+    }
+    if (price) {
+      gameData.price = price;
+    }
+    if (quantity) {
+      gameData.quantity = quantity;
+    }
+    if (imageURL) {
+      gameData.imageURL = imageURL;
+    }
+
+    const game = new Game(gameData);
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          categories: (cb) => Category.find().select("name").exec(cb),
+          devices: (cb) => Device.find().select("name").exec(cb),
+        },
+        (err, { categories, devices }) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.render("game-form", {
+            categories,
+            devices,
+            game,
+            errors: errors.array(),
+          });
+        }
+      );
+    } else {
+      Game.findByIdAndUpdate(req.params.id, game, (err) => {
+        if (err) {
+          return next(err);
+        }
+
+        res.redirect("/games");
+      });
+    }
+  },
+];
 
 export function getGameDelete(req, res) {
   res.send("Not Implemented: GET Game Delete");
